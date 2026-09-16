@@ -18,7 +18,7 @@ from reportlab.lib.colors import black
 
 # Passwortrichtlinie
 SONDERZEICHEN = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`"
-RICHTLINIE_ZEILE1 = "Passwortrichtlinie: mind. 8 Zeichen, Gross- und Kleinschreibung,"
+RICHTLINIE_ZEILE1 = "Passwortrichtlinie: mind. 8 Zeichen, Groß- und Kleinschreibung,"
 RICHTLINIE_ZEILE2 = f"mind. 1 Sonderzeichen: {SONDERZEICHEN}"
 RICHTLINIE_ZEILE3 = "keine Verwendung von Teilen des Benutzernamens"
 
