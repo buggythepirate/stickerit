@@ -18,8 +18,9 @@ from reportlab.lib.colors import black
 
 # Passwortrichtlinie
 SONDERZEICHEN = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`"
-RICHTLINIE_ZEILE1 = "Passwortrichtlinie: 12 Zeichen, Gross- und Kleinschreibung,"
-RICHTLINIE_ZEILE2 = f"Sonderzeichen zwingend: {SONDERZEICHEN}"
+RICHTLINIE_ZEILE1 = "Passwortrichtlinie: mind. 8 Zeichen, Gross- und Kleinschreibung,"
+RICHTLINIE_ZEILE2 = f"mind. 1 Sonderzeichen: {SONDERZEICHEN}"
+RICHTLINIE_ZEILE3 = "keine Verwendung von Teilen des Benutzernamens"
 
 # Seitengestaltung A4
 PAGE_W, PAGE_H = A4
@@ -138,7 +139,7 @@ def draw_label(c, x, y, rec):
 
     # Vordruck neues Passwort
     c.setFont("Helvetica-Bold", FONTSIZE_KLEIN)
-    c.drawString(inner_x, cur, "Neues Passwort (13 Zeichen):")
+    c.drawString(inner_x, cur, "Neues Passwort (mind. 8 Zeichen):")
     cur -= 4 * mm
 
     box = 7 * mm
@@ -157,6 +158,8 @@ def draw_label(c, x, y, rec):
     c.drawString(inner_x, cur, RICHTLINIE_ZEILE1)
     cur -= FONTSIZE_RICHTLINIE + 2
     c.drawString(inner_x, cur, RICHTLINIE_ZEILE2)
+    cur -= FONTSIZE_RICHTLINIE + 2
+    c.drawString(inner_x, cur, RICHTLINIE_ZEILE3)
 
 
 def build_pdf(records, pdf_path):
