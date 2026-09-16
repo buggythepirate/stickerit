@@ -2,7 +2,7 @@
 """Erstellt PDF-Etiketten (2x4 pro A4-Seite) aus einer Excel-Datei.
 
 Erwartete Spalten (Header in der ersten Zeile, Gross-/Kleinschreibung egal):
-Klasse, Vorname, Nachname, Benutzername, InitialPasswort
+Zuname, Vorname, Account Name, Email, Anfangskennwort
 
 Aufruf:
     python3 create_labels.py schueler.xlsx etiketten.pdf
@@ -35,7 +35,6 @@ LABEL_H = (PAGE_H - 2 * MARGIN_Y - (ROWS - 1) * GAP) / ROWS
 PAD = 4 * mm  # Innenabstand im Etikett
 
 # Schriftgroessen
-FONTSIZE_KLASSE = 12
 FONTSIZE_BODY = 10
 FONTSIZE_RICHTLINIE = 7
 FONTSIZE_KLEIN = 8
@@ -63,14 +62,14 @@ def read_rows(xlsx_path):
     for idx, name in enumerate(header):
         if name is None:
             continue
-        header_map[str(name).strip().lower()] = idx
+        header_map[str(name).strip().lower().replace(" ", "")] = idx
 
     needed = {
-        "klasse": "Klasse",
+        "zuname": "Zuname",
         "vorname": "Vorname",
-        "nachname": "Nachname",
-        "benutzername": "Benutzername",
-        "initialpasswort": "InitialPasswort",
+        "accountname": "Account Name",
+        "email": "Email",
+        "anfangskennwort": "Anfangskennwort",
     }
     col_idx = {}
     for key, display in needed.items():
@@ -82,18 +81,13 @@ def read_rows(xlsx_path):
     for raw in rows:
         if raw is None or all(c is None or str(c).strip() == "" for c in raw):
             continue
-        klasse = normalize(raw[col_idx["klasse"]])
-        vorname = normalize(raw[col_idx["vorname"]])
-        nachname = normalize(raw[col_idx["nachname"]])
-        benutzername = normalize(raw[col_idx["benutzername"]])
-        initialpasswort = normalize(raw[col_idx["initialpasswort"]])
         records.append(
             {
-                "klasse": klasse,
-                "vorname": vorname,
-                "nachname": nachname,
-                "benutzername": benutzername,
-                "initialpasswort": initialpasswort,
+                "zuname": normalize(raw[col_idx["zuname"]]),
+                "vorname": normalize(raw[col_idx["vorname"]]),
+                "accountname": normalize(raw[col_idx["accountname"]]),
+                "email": normalize(raw[col_idx["email"]]),
+                "anfangskennwort": normalize(raw[col_idx["anfangskennwort"]]),
             }
         )
     return records
@@ -108,32 +102,35 @@ def draw_label(c, x, y, rec):
     inner_x = x + PAD
     inner_top = y + LABEL_H - PAD
 
-    # Klasse (oben)
-    c.setFont("Helvetica-Bold", FONTSIZE_KLASSE)
-    c.drawString(inner_x, inner_top - FONTSIZE_KLASSE, f"Klasse: {rec['klasse']}")
-
     line_h = FONTSIZE_BODY + 4
-    cur = inner_top - FONTSIZE_KLASSE - line_h
+    cur = inner_top - FONTSIZE_BODY
 
-    # Voller Name
+    # Voller Name (oben)
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
     c.drawString(inner_x, cur, "Name:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, f"{rec['vorname']} {rec['nachname']}")
+    c.drawString(inner_x + 60, cur, f"{rec['vorname']} {rec['zuname']}")
     cur -= line_h
 
-    # Benutzername
+    # Account Name
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
     c.drawString(inner_x, cur, "Benutzername:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, rec["benutzername"])
+    c.drawString(inner_x + 60, cur, rec["accountname"])
     cur -= line_h
 
-    # Initialpasswort
+    # Email
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
-    c.drawString(inner_x, cur, "Initialpasswort:")
+    c.drawString(inner_x, cur, "Email:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, rec["initialpasswort"])
+    c.drawString(inner_x + 60, cur, rec["email"])
+    cur -= line_h
+
+    # Anfangskennwort
+    c.setFont("Helvetica-Bold", FONTSIZE_BODY)
+    c.drawString(inner_x, cur, "Anfangskennwort:")
+    c.setFont("Helvetica", FONTSIZE_BODY)
+    c.drawString(inner_x + 60, cur, rec["anfangskennwort"])
     cur -= line_h + 2
 
     # Vordruck neues Passwort

@@ -10,8 +10,8 @@ python3 create_labels.py schueler.xlsx etiketten.pdf
 ```
 
 Erwartete Excel-Spalten (erste Zeile als Header):
-`Klasse | Vorname | Nachname | Benutzername | InitialPasswort`
+`Zuname | Vorname | Account Name | Email | Anfangskennwort`
 
-Pro Excel-Zeile entsteht ein umrandetes Etikett mit Klasse, vollem Namen,
-Benutzername, Initialpasswort, Vordruck für ein neues Passwort (13 Kästchen)
-und der Passwortrichtlinie.
+Pro Excel-Zeile entsteht ein umrandetes Etikett mit vollem Namen, Benutzername,
+Email, Anfangskennwort, Vordruck für ein neues Passwort (13 Kästchen) und der
+Passwortrichtlinie.
