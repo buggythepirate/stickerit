@@ -25,19 +25,19 @@ RICHTLINIE_ZEILE2 = f"Sonderzeichen zwingend: {SONDERZEICHEN}"
 PAGE_W, PAGE_H = A4
 MARGIN_X = 10 * mm
 MARGIN_Y = 10 * mm
-COLS = 2
+COLS = 1
 ROWS = 4
-GAP = 4 * mm
+GAP = 6 * mm
 
 LABEL_W = (PAGE_W - 2 * MARGIN_X - (COLS - 1) * GAP) / COLS
 LABEL_H = (PAGE_H - 2 * MARGIN_Y - (ROWS - 1) * GAP) / ROWS
 
-PAD = 4 * mm  # Innenabstand im Etikett
+PAD = 5 * mm  # Innenabstand im Etikett
 
 # Schriftgroessen
 FONTSIZE_BODY = 10
-FONTSIZE_RICHTLINIE = 7
-FONTSIZE_KLEIN = 8
+FONTSIZE_RICHTLINIE = 9
+FONTSIZE_KLEIN = 10
 
 PW_PLACEHOLDER_COUNT = 13
 
@@ -102,44 +102,47 @@ def draw_label(c, x, y, rec):
     inner_x = x + PAD
     inner_top = y + LABEL_H - PAD
 
-    line_h = FONTSIZE_BODY + 4
+    line_h = FONTSIZE_BODY + 8
     cur = inner_top - FONTSIZE_BODY
+
+    # Horizontaler Abstand zwischen Kategorie-Label und Wert
+    label_offset = 38 * mm
 
     # Voller Name (oben)
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
     c.drawString(inner_x, cur, "Name:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, f"{rec['vorname']} {rec['zuname']}")
+    c.drawString(inner_x + label_offset, cur, f"{rec['vorname']} {rec['zuname']}")
     cur -= line_h
 
     # Account Name
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
     c.drawString(inner_x, cur, "Benutzername:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, rec["accountname"])
+    c.drawString(inner_x + label_offset, cur, rec["accountname"])
     cur -= line_h
 
     # Email
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
     c.drawString(inner_x, cur, "Email:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, rec["email"])
+    c.drawString(inner_x + label_offset, cur, rec["email"])
     cur -= line_h
 
     # Anfangskennwort
     c.setFont("Helvetica-Bold", FONTSIZE_BODY)
     c.drawString(inner_x, cur, "Anfangskennwort:")
     c.setFont("Helvetica", FONTSIZE_BODY)
-    c.drawString(inner_x + 60, cur, rec["anfangskennwort"])
+    c.drawString(inner_x + label_offset, cur, rec["anfangskennwort"])
     cur -= line_h + 2
 
     # Vordruck neues Passwort
     c.setFont("Helvetica-Bold", FONTSIZE_KLEIN)
     c.drawString(inner_x, cur, "Neues Passwort (13 Zeichen):")
-    cur -= 3 * mm
+    cur -= 4 * mm
 
-    box = 4.2 * mm
-    box_gap = 1.0 * mm
+    box = 7 * mm
+    box_gap = 1.2 * mm
     box_y = cur - box
     bx = inner_x
     for i in range(PW_PLACEHOLDER_COUNT):
@@ -147,12 +150,12 @@ def draw_label(c, x, y, rec):
         c.setLineWidth(0.5)
         c.rect(bx, box_y, box, box)
         bx += box + box_gap
-    cur = box_y - 3 * mm
+    cur = box_y - 4 * mm
 
     # Passwortrichtlinie
     c.setFont("Helvetica", FONTSIZE_RICHTLINIE)
     c.drawString(inner_x, cur, RICHTLINIE_ZEILE1)
-    cur -= FONTSIZE_RICHTLINIE + 1
+    cur -= FONTSIZE_RICHTLINIE + 2
     c.drawString(inner_x, cur, RICHTLINIE_ZEILE2)
 
 
